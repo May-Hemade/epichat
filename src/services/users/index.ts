@@ -5,6 +5,7 @@ import { JWTAuthenticate } from "../auth/tool";
 import { JWTAuthMiddleware } from "../auth/toke";
 import bcrypt from "bcrypt"
 import { Request, Response, NextFunction, RequestHandler } from "express";
+import { IUser } from "../types/IUser";
 
 
 
@@ -28,7 +29,7 @@ usersRouter.get("/id",  async(req:Request, res: Response, next: NextFunction) =>
   });
   
 
-usersRouter.post("/account", async (req:Request, res: Response, next: NextFunction) => {
+usersRouter.post("/register", async (req:Request, res: Response, next: NextFunction) => {
   try {
     const newUser = new UserModel(req.body)
     const { _id } = await newUser.save()
@@ -41,7 +42,7 @@ usersRouter.post("/account", async (req:Request, res: Response, next: NextFuncti
 const checkCredentials = async (email: string, password: string) => {
   const user = await UserModel.findOne({ email });
   if (user) {
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(password, user.password!)
     if (isMatch) {
       return user;
     } else {
@@ -97,6 +98,26 @@ usersRouter.put("/me", JWTAuthMiddleware, async (req:any, res: any, next: any) =
       next(error)
     }
 })
+
+// usersRouter.get("/googleLogin",passport.authenticate("google", { scope: ["email", "profile"] })) 
+
+// usersRouter.get(
+//   "/googleRedirect",
+//   passport.authenticate("google"),
+//   async (req, res, next) => {
+//     try {
+//       console.log("TOKENS: ", req.user.token)
+      
+//       res.redirect(
+//         `${process.env.FE_URL}?accessToken=${req.user.token.accessToken}&refreshToken=${req.user.token.refreshToken}`
+//       )
+//     } catch (error) {
+//       next(error)
+//     }
+//   }
+// )
+
+
 
 
 export default usersRouter;

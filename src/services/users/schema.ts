@@ -7,11 +7,11 @@ import { IUser } from '../types/IUser';
 
 interface UserDocument extends Document {
   _id: string,
-  name: string | any,
-  surname: string,
+  username: string,
+  avatar: string,
   email: string,
   password: string,
-  role: string
+  
 }
 
 interface UserModel extends Model<UserDocument> {
@@ -20,10 +20,10 @@ interface UserModel extends Model<UserDocument> {
 const { Schema, model } = mongoose
 
 export const UserSchema = new Schema<IUser, UserModel>({
-  name: { type: String, required: true},
-  surname: { type: String, required: true },
+  username: { type: String, required: true},
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  avatar: {type: String, required: true }
 })
 
 UserSchema.pre<UserDocument>("save", async function (next) {
@@ -61,3 +61,6 @@ UserSchema.statics.checkCredentials = async function (email:string, plainPw:stri
     return null 
   }
 }
+const UserModel = model<IUser, UserModel>('User', UserSchema);
+
+export default UserModel
