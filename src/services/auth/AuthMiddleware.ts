@@ -5,7 +5,7 @@ import { verifyJWTToken } from './GenerateToken'
 
 
 
-export const AuthMiddleware = async(req:IReqUser,res:Response,next:any)=>{
+export const authMiddleware = async(req:IReqUser,res:Response,next:NextFunction)=>{
     try {
         if(!req.headers.authorization){
             next(createHttpError(401, "Please provide Bearer token on headers!"))

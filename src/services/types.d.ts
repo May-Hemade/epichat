@@ -1,16 +1,6 @@
 import { Request } from "express"
 
-
 export interface Error {
-    status: number | string
-    message:string,
-    errorList:string
-}
-export interface Response {
-    status: string | number
-}
-
-interface Error {
     status: number | string,
     message: string,
     errorsList:string
