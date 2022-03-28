@@ -30,3 +30,11 @@ interface MessageContent {
     text?: string,
     media?: string,
 }
+
+declare global {
+    namespace Express {
+        interface User {
+            _id: string
+        }
+    }
+}
