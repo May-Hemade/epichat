@@ -52,4 +52,57 @@ chatRouter
         }
     })
 
+    .get('/', async (req: Request, res: Response, next: NextFunction) => {
+        try {
+
+            let sender = req.user?._id
+            sender = "6241a2a6eec212f2949a9be1"
+            const senderChats = await ChatModel.find({
+                'members': sender,
+            })
+            res.send(senderChats)
+
+
+        } catch (error) {
+            next(error)
+        }
+
+    })
+
+    .get('/:chatId', async (req: Request, res: Response, next: NextFunction) => {
+        try {
+
+            let sender = req.user?._id
+            sender = "6241a2a6eec212f2949a9be1"
+            const chatId = req.params.chatId
+
+
+            const chat = await ChatModel.findOne({
+
+                _id: chatId,
+                'members': sender,
+            })
+            if (chat) {
+                res.send(chat)
+            } else {
+                next(
+                    createHttpError(
+                        404,
+                        `chat with id ${chatId} not found!`
+                    )
+                );
+            }
+
+
+
+
+        } catch (error) {
+            next(error)
+        }
+
+    })
+
+
+
+
 export default chatRouter
