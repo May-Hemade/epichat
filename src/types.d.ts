@@ -1,4 +1,18 @@
+interface IPayload{
+    _id:string
+}
+interface Request{
+    user:User
+}
 
+declare namespace Express {
+    export interface Request {
+        user: any;
+    }
+    export interface Response {
+        user: any;
+    }
+  }
 interface Error {
     status: number,
     message: string,
@@ -12,8 +26,8 @@ interface Chat {
 
 interface User {
     _id: string,
-    username: string,
-    email: string,
+    username?: string,
+    email?: string,
     avatar?: string,
 }
 
@@ -35,6 +49,8 @@ declare global {
         interface User {
             _id: string
         }
+    }
+}
 namespace Express {
     interface Request {
         user?: IUser

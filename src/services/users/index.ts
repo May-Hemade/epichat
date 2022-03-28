@@ -1,11 +1,11 @@
 import express from "express";
 import createHttpError from "http-errors";
 import { UserModel } from "../users/model";
-import { JWTAuthenticate } from "../auth/tool";
-import { JWTAuthMiddleware } from "../auth/toke";
+import { authenticateUser } from "../auth/GenerateToken";
+import { authMiddleware } from "../auth/AuthMiddleware";
 import bcrypt from "bcrypt"
 import { Request, Response, NextFunction, RequestHandler } from "express";
-import { IUser } from "../types/IUser";
+import { IRequest } from "../types";
 
 
 
@@ -66,7 +66,7 @@ usersRouter.post("/login", async (req:Request, res: Response, next: NextFunction
 
     if (user) {
       // 3. If credentials are fine we are going to generate an access token
-      const accessToken = await JWTAuthenticate(user)
+      const accessToken = await authenticateUser(user)
       res.send(accessToken)
     } else {
       // 4. If they are not --> error (401)
@@ -78,22 +78,28 @@ usersRouter.post("/login", async (req:Request, res: Response, next: NextFunction
 });
 
 
-usersRouter.get("/me", JWTAuthMiddleware, async (req:any, res: any, next: any) => {
+usersRouter.get("/me", authMiddleware, async (req:Request, res:Response, next:NextFunction) => {
   try {
-    await req.user.save()
-    res.send( req.user)
+    const request = req as IRequest
+
+    if(request.user){
+      const user = await UserModel.findById(request.user._id)
+      res.send(user)
+    }
+    
   } catch (error) {
     next(error)
   }
 }
 );
 
-usersRouter.put("/me", JWTAuthMiddleware, async (req:any, res: any, next: any) => {
+usersRouter.put("/me", authMiddleware, async (req:Request, res:Response, next:NextFunction) => {
     try {
-        req.author.name = "Ali"
-      req.author.email = "ali@gmail.com"
-      await req.author.save() 
-      res.send()
+      const request = req as IRequest
+      const user = await UserModel.findByIdAndUpdate(request.user._id, req.body, {new:true})
+      if(user){
+        res.send(user)
+      }
     } catch (error) {
       next(error)
     }

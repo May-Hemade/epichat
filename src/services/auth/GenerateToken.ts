@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken'
-import { IPayload, IUser } from "../types"
 
-export const authenticateUser = async (user:IUser) => {
+export const authenticateUser = async (user:User) => {
     const accessToken = await generateJWTToken({ _id: user._id})
     return accessToken
   }
@@ -9,10 +8,10 @@ export const authenticateUser = async (user:IUser) => {
 
 
 
-  const generateJWTToken = (payload:{_id:string}) =>
+  const generateJWTToken = (user:{_id:string}) =>
   new Promise((resolve, reject) =>
     jwt.sign(
-      payload,
+      user,
       process.env.JWT_SECRET!,
       { expiresIn: "1 week" },
       (err, token) => {
@@ -24,8 +23,8 @@ export const authenticateUser = async (user:IUser) => {
 
 export const verifyJWTToken = (token:string): Promise<IPayload> =>
   new Promise((res, rej) =>
-    jwt.verify(token, process.env.JWT_SECRET!, (err, payload) => {
+    jwt.verify(token, process.env.JWT_SECRET!, (err, user) => {
       if (err) rej(err)
-      else res(payload as IPayload)
+      else res(user as IPayload)
     })
   )

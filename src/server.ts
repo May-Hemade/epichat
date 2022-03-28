@@ -1,10 +1,12 @@
 import express from 'express'
 import mongoose from 'mongoose'
 import listEndpoints from 'express-list-endpoints'
+import usersRouter from './services/users'
 const server = express()
 const port = process.env.PORT || 3001
 process.env.TS_NODE_DEV && require("dotenv").config()
 server.use(express.json())
+server.use("/user", usersRouter)
 
 
 

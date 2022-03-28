@@ -1,11 +1,10 @@
 import { Response, NextFunction} from 'express'
 import createHttpError from 'http-errors'
-import { IReqUser } from '../types'
 import { verifyJWTToken } from './GenerateToken'
 
 
 
-export const authMiddleware = async(req:IReqUser,res:Response,next:NextFunction)=>{
+export const authMiddleware = async(req:Request,res:Response,next:NextFunction)=>{
     try {
         if(!req.headers.authorization){
             next(createHttpError(401, "Please provide Bearer token on headers!"))
