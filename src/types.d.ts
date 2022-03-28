@@ -1,7 +1,7 @@
-import { Request } from 'express'
 
-interface Error {
-    status: number,
-    message: string,
-    errorsList: string
+namespace Express {
+    interface Request {
+        user?: IUser
+        _id: string
+    }
 }
