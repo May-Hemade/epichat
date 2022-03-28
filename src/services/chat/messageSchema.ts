@@ -16,6 +16,8 @@ const chatMessageSchema = new Schema<ChatMessage>(
     }
 )
 
+
+
 const ChatMessageModel = model("ChatMessage", chatMessageSchema)
 
 export default ChatMessageModel;
