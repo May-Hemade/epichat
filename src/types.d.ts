@@ -6,18 +6,16 @@ interface Error {
     errorsList: string
 }
 interface Chat {
-
     _id: string,
     members: User[],
     messages: ChatMessage[]
-
 }
 
 interface User {
     _id: string,
     username: string,
     email: string,
-    avatar: string,
+    avatar?: string,
 }
 
 interface ChatMessage {
@@ -27,7 +25,16 @@ interface ChatMessage {
     content: MessageContent,
 
 }
+
 interface MessageContent {
-    text: string,
-    media: string,
+    text?: string,
+    media?: string,
+}
+
+declare global {
+    namespace Express {
+        interface User {
+            _id: string
+        }
+    }
 }
