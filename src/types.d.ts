@@ -1,4 +1,3 @@
-import { Request } from 'express'
 
 interface Error {
     status: number,
@@ -36,5 +35,9 @@ declare global {
         interface User {
             _id: string
         }
+namespace Express {
+    interface Request {
+        user?: IUser
+        _id: string
     }
 }
