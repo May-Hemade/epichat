@@ -21,7 +21,7 @@ chatSchema.methods.toJSON = function () {
     console.log(this)
     const chatDocument = this
     const chatObject = chatDocument.toObject()
-    delete chatObject.messages
+
     delete chatObject.__v
     return chatObject
 }

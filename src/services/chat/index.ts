@@ -27,7 +27,7 @@ chatRouter
                             recipient
                         ]
                     }
-                })
+                }).select("-messages")
 
                 if (chat) {
                     res.send(chat)
@@ -59,7 +59,7 @@ chatRouter
             sender = "6241a2a6eec212f2949a9be1"
             const senderChats = await ChatModel.find({
                 'members': sender,
-            })
+            }).select("-messages")
             res.send(senderChats)
 
 
