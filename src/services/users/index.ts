@@ -1,19 +1,17 @@
 import express from "express";
 import createHttpError from "http-errors";
-import { UserModel } from "../users/model";
+import User from "./schema";
 import { authenticateUser } from "../auth/GenerateToken";
 import { authMiddleware } from "../auth/AuthMiddleware";
-import bcrypt from "bcrypt"
 import { Request, Response, NextFunction, RequestHandler } from "express";
-import { IRequest } from "../types";
-
+import { IRequest } from "../../types"
 
 
 const usersRouter = express.Router();
 
 usersRouter.get("/",  async(req:Request, res: Response, next: NextFunction) => {
   try {
-    const users = await UserModel.find();
+    const users = await User.find();
     res.send(users);
   } catch (error) {
     next(error);
@@ -21,7 +19,7 @@ usersRouter.get("/",  async(req:Request, res: Response, next: NextFunction) => {
 });
 usersRouter.get("/id",  async(req:Request, res: Response, next: NextFunction) => {
     try {
-      const users = await UserModel.findById(req.params.id);
+      const users = await User.findById(req.params.id);
       res.send(users);
     } catch (error) {
       next(error);
@@ -31,7 +29,7 @@ usersRouter.get("/id",  async(req:Request, res: Response, next: NextFunction) =>
 
 usersRouter.post("/register", async (req:Request, res: Response, next: NextFunction) => {
   try {
-    const newUser = new UserModel(req.body)
+    const newUser = new User(req.body)
     const { _id } = await newUser.save()
     res.send({ _id })
   } catch (error) {
@@ -39,19 +37,7 @@ usersRouter.post("/register", async (req:Request, res: Response, next: NextFunct
   }
 });
 
-const checkCredentials = async (email: string, password: string) => {
-  const user = await UserModel.findOne({ email });
-  if (user) {
-    const isMatch = await bcrypt.compare(password, user.password!)
-    if (isMatch) {
-      return user;
-    } else {
-      return null;
-    }
-  } else {
-    return null;
-  }
-}
+
 
 
 
@@ -62,7 +48,7 @@ usersRouter.post("/login", async (req:Request, res: Response, next: NextFunction
     const { email, password } = req.body
 
     // 2. Verify credentials
-  const user = await checkCredentials(email, password)
+  const user = await User.checkCredentials(email, password)
 
     if (user) {
       // 3. If credentials are fine we are going to generate an access token
@@ -80,10 +66,10 @@ usersRouter.post("/login", async (req:Request, res: Response, next: NextFunction
 
 usersRouter.get("/me", authMiddleware, async (req:Request, res:Response, next:NextFunction) => {
   try {
-    const request = req as IRequest
-
+    const request = req as unknown as IRequest
+    
     if(request.user){
-      const user = await UserModel.findById(request.user._id)
+      const user = await User.findById(request.user._id)
       res.send(user)
     }
     
@@ -95,8 +81,8 @@ usersRouter.get("/me", authMiddleware, async (req:Request, res:Response, next:Ne
 
 usersRouter.put("/me", authMiddleware, async (req:Request, res:Response, next:NextFunction) => {
     try {
-      const request = req as IRequest
-      const user = await UserModel.findByIdAndUpdate(request.user._id, req.body, {new:true})
+      const request = req as unknown as IRequest
+      const user = await User.findByIdAndUpdate(request.user._id, req.body, {new:true})
       if(user){
         res.send(user)
       }

@@ -1,10 +1,10 @@
-import { Request, Response, NextFunction } from 'express'
+import { Response, NextFunction, RequestHandler} from 'express'
 import createHttpError from 'http-errors'
 import { verifyJWTToken } from './GenerateToken'
 
 
 
-export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+export const authMiddleware:RequestHandler = async(req,res,next)=>{
     try {
         if (!req.headers.authorization) {
             next(createHttpError(401, "Please provide Bearer token on headers!"))

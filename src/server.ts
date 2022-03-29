@@ -1,14 +1,19 @@
 import express from 'express'
 import mongoose from 'mongoose'
 import listEndpoints from 'express-list-endpoints'
+import cors from "cors"
+import passport from "passport";
 import usersRouter from './services/users'
 const server = express()
 const port = process.env.PORT || 3001
 process.env.TS_NODE_DEV && require("dotenv").config()
-server.use(express.json())
-server.use("/user", usersRouter)
 
 
+server.use(express.json());
+server.use(cors())
+server.use(passport.initialize())
+
+server.use('/users', usersRouter)
 
 
 if(!process.env.MONGO_CONNECTION){
