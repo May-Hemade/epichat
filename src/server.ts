@@ -4,14 +4,22 @@ import listEndpoints from 'express-list-endpoints'
 import cors from "cors"
 import passport from "passport";
 import usersRouter from './services/users'
+import googleStrategy from './services/auth/oauth';
+
+
+
+
 const server = express()
 const port = process.env.PORT || 3001
 process.env.TS_NODE_DEV && require("dotenv").config()
 
-
+passport.use("google", googleStrategy)
 server.use(express.json());
 server.use(cors())
 server.use(passport.initialize())
+
+
+
 
 server.use('/users', usersRouter)
 

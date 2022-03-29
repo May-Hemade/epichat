@@ -4,14 +4,7 @@ import { Model } from 'mongoose';
 import {Document} from 'mongoose'
 import { IUser } from '../../types';
 
-interface UserDocument extends Document {
-  _id: string,
-  username: string,
-  avatar: string,
-  email: string,
-  password: string,
-  
-}
+
 
 interface UserModel extends Model<IUser> {
   checkCredentials(email:string, password:string):Promise<IUser |null>;

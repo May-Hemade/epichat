@@ -18,6 +18,20 @@ interface IRequest extends Request {
 
 
 
+
+
+export interface UserProfile {
+    googleUserId: string;
+    emails: string | null;
+    emailVerified?: boolean | null;
+    familyName: string | null;
+    givenName: string | null;
+    name: string | null;
+    gSuiteDomain: string | null;
+    language: string | null;
+    avatarUrl: string | null;
+}
+
 // May's Chat Interface
 export interface Chat {
     _id: string,
@@ -48,8 +62,9 @@ export interface MessageContent {
 
 declare global {
     namespace Express {
-        interface User {
+        interface IUser {
             _id: string
+            token?:string
         }
     }
 }
