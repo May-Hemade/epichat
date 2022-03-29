@@ -12,10 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AuthMiddleware = void 0;
+exports.authMiddleware = void 0;
 const http_errors_1 = __importDefault(require("http-errors"));
 const GenerateToken_1 = require("./GenerateToken");
-const AuthMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const authMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (!req.headers.authorization) {
             next((0, http_errors_1.default)(401, "Please provide Bearer token on headers!"));
@@ -35,4 +35,4 @@ const AuthMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
         next((0, http_errors_1.default)(401, "Token not valid!"));
     }
 });
-exports.AuthMiddleware = AuthMiddleware;
+exports.authMiddleware = authMiddleware;
