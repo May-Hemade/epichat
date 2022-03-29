@@ -2,22 +2,23 @@ interface IPayload {
     _id: string
 }
 interface Request {
-    user: User
+    _id:string
 }
 
-declare namespace Express {
-    export interface Request {
-        user: any;
-    }
-    export interface Response {
-        user: any;
-    }
-}
 interface Error {
     status: number,
     message: string,
     errorsList: string
 }
+
+interface IRequest {
+    headers:any
+    user:User
+}
+
+
+
+// May's Chat Interface
 export interface Chat {
     _id: string,
     members: User[],

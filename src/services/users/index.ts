@@ -3,10 +3,8 @@ import createHttpError from "http-errors";
 import { UserModel } from "../users/model";
 import { authenticateUser } from "../auth/GenerateToken";
 import { authMiddleware } from "../auth/AuthMiddleware";
-import bcrypt from "bcrypt"
 import { Request, Response, NextFunction, RequestHandler } from "express";
-import { IRequest } from "../types";
-
+import { IRequest } from "../../types"
 
 
 const usersRouter = express.Router();
@@ -39,19 +37,7 @@ usersRouter.post("/register", async (req:Request, res: Response, next: NextFunct
   }
 });
 
-const checkCredentials = async (email: string, password: string) => {
-  const user = await UserModel.findOne({ email });
-  if (user) {
-    const isMatch = await bcrypt.compare(password, user.password!)
-    if (isMatch) {
-      return user;
-    } else {
-      return null;
-    }
-  } else {
-    return null;
-  }
-}
+
 
 
 
