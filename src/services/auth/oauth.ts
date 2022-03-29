@@ -1,6 +1,6 @@
 import passport from "passport"
 import { Strategy } from "passport-google-oauth20"
-import github from 'passport-github'
+import GithubStrategy from 'passport-github'
 
 import User from "../users/schema"
 import { authenticateUser } from "./GenerateToken"
@@ -62,12 +62,12 @@ if (typeof clientSecret === "undefined") {
   throw new Error("clientSecret is undefined");
 }
 
-export const gitHubStrategy = new github({
+export const gitHubStrategy = new GithubStrategy({
   clientID,
   clientSecret,
-  callbackURL: `${callbackURL}/authors/githubRedirect`
+  callbackURL: `${callbackURL}/users/githubRedirect`
 },
-  async (accessToken: string, refreshToken: string, profile: github.Profile, passportNext) => {
+  async (accessToken: string, refreshToken: string, profile: GithubStrategy.Profile, passportNext) => {
     try {
       console.log("Github:", profile);
       const user = await User.findOne({ githubId: profile.id })

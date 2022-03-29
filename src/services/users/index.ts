@@ -110,10 +110,31 @@ usersRouter.get(
   async (req, res, next) => {
     try {
       const request = req as unknown as IRequest;
-      console.log("TOKENS: ", request.user.accessToken);
+      console.log("TOKENS: ", request.user.token);
 
       res.redirect(
-        `${process.env.FE_URL}?accessToken=${request.user.accessToken}`
+        `${process.env.FE_URL}?accessToken=${request.user.token}`
+      );
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+
+
+usersRouter.get(
+  "/githubLogin",
+  passport.authenticate("github", { scope: [] })
+);
+usersRouter.get(
+  "/githubRedirect",
+  passport.authenticate("github", { failureRedirect: "/login" }),
+  async (req, res, next) => {
+    try {
+      const request = req as unknown as IRequest;
+      res.redirect(
+        `${process.env.GOOGLE_FE_URL}?accessToken=${request.user.token}`
       );
     } catch (error) {
       next(error);

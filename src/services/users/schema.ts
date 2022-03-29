@@ -16,13 +16,14 @@ export const UserSchema = new Schema<IUser, UserModel>({
   email: { type: String },
   password: { type: String },
   avatar: {type: String },
-  googleId:{type:String}
+  googleId:{type:String},
+  githubId:{type:String}
 })
 
 UserSchema.pre("save", async function (next) {
   
   const newUser = this 
-  if (newUser.googleId) return next()
+  if (newUser.googleId || newUser.githubId) return next()
   const plainPw = newUser.password
   if (newUser.isModified("password")) {
     const hash = await bcrypt.hash(plainPw, 10)
