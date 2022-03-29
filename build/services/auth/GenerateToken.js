@@ -19,16 +19,16 @@ const authenticateUser = (user) => __awaiter(void 0, void 0, void 0, function* (
     return accessToken;
 });
 exports.authenticateUser = authenticateUser;
-const generateJWTToken = (user) => new Promise((resolve, reject) => jsonwebtoken_1.default.sign(user, process.env.JWT_SECRET, { expiresIn: "1 week" }, (err, token) => {
-    if (err || !token)
+const generateJWTToken = (payload) => new Promise((resolve, reject) => jsonwebtoken_1.default.sign(payload, process.env.JWT_SECRET, { expiresIn: "1 week" }, (err, token) => {
+    if (err)
         reject(err);
     else
         resolve(token);
 }));
-const verifyJWTToken = (token) => new Promise((res, rej) => jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET, (err, user) => {
+const verifyJWTToken = (token) => new Promise((res, rej) => jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET, (err, payload) => {
     if (err)
         rej(err);
     else
-        res(user);
+        res(payload);
 }));
 exports.verifyJWTToken = verifyJWTToken;
