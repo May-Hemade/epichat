@@ -7,6 +7,7 @@ import { Request, Response, NextFunction, RequestHandler } from "express";
 import { IRequest } from "../../types";
 import passport from "passport";
 import { cloudinary, parser } from "../utils/Cloudinary";
+console.log(process.env.GOOGLE_SECRET);
 
 
 const usersRouter = express.Router();
@@ -109,10 +110,10 @@ usersRouter.get(
   async (req, res, next) => {
     try {
       const request = req as unknown as IRequest;
-      console.log("TOKENS: ", request.user.token);
+      console.log("TOKENS: ", request.user.accessToken);
 
       res.redirect(
-        `${process.env.FE_URL}?accessToken=${request.user.token.accessToken}&refreshToken=${request.user.token.refreshToken}`
+        `${process.env.FE_URL}?accessToken=${request.user.accessToken}`
       );
     } catch (error) {
       next(error);

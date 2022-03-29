@@ -5,12 +5,11 @@ import github from 'passport-github'
 import User from "../users/schema"
 import { authenticateUser } from "./GenerateToken"
 process.env.TS_NODE_DEV && require("dotenv").config()
-console.log(process.env.GOOGLE_ID);
 
 const googleStrategy = new Strategy({
   clientID: process.env.GOOGLE_ID || "",
   clientSecret: process.env.GOOGLE_SECRET || "",
-  callbackURL: `${process.env.API_URL}/users/googleRedirect`,
+  callbackURL: `${process.env.BE_URL}/users/googleRedirect`,
   passReqToCallback: true
 },
   async function (request, accessToken, refresh, profile, done) {
@@ -18,7 +17,7 @@ const googleStrategy = new Strategy({
       console.log(profile)
 
       if (profile.emails && profile.emails.length > 0) {
-        const user = await User.findOne({ email: profile.emails[0] })
+        const user = await User.findOne({ googleId: profile.id })
 
         if (user) {
           const token = await authenticateUser(user)
@@ -33,8 +32,8 @@ const googleStrategy = new Strategy({
             googleId: profile.id,
           })
 
-          const savedUser = await newUser.save()
-          const token = await authenticateUser(savedUser)
+        //   const savedUser = await newUser.save()
+          const token = await authenticateUser(newUser)
 
           done(null, { _id: newUser._id, token })
         }

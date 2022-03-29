@@ -44,7 +44,8 @@ export interface IUser {
     username?: string,
     email?: string,
     avatar?: string,
-    password: string
+    password: string,
+    googleId?:string
 }
 
 export interface ChatMessage {
