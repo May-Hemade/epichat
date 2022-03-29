@@ -5,6 +5,7 @@ import cors from "cors"
 import passport from "passport";
 import usersRouter from './services/users'
 import googleStrategy from './services/auth/oauth';
+import chatRouter from './services/chat';
 
 const server = express()
 const port = process.env.PORT || 3001
@@ -16,6 +17,7 @@ server.use(cors())
 server.use(passport.initialize())
 
 server.use('/users', usersRouter)
+server.use('/chat', chatRouter)
 
 if (!process.env.MONGO_CONNECTION) {
   throw Error("Url is undefined!")
