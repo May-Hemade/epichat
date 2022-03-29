@@ -1,9 +1,8 @@
 import mongoose from 'mongoose'
 import bcrypt from "bcrypt"
-//import IUser from '../interfaces/Iuser'
 import { Model } from 'mongoose';
 import {Document} from 'mongoose'
-import { IUser } from '../types/IUser';
+import { User } from '../../types';
 
 interface UserDocument extends Document {
   _id: string,
@@ -14,19 +13,19 @@ interface UserDocument extends Document {
   
 }
 
-interface UserModel extends Model<UserDocument> {
-  checkCredentials(email:string, password:string):Promise<UserDocument |null>;
+interface UserModel extends Model<User> {
+  checkCredentials(email:string, password:string):Promise<User |null>;
 }
 const { Schema, model } = mongoose
 
-export const UserSchema = new Schema<IUser, UserModel>({
+export const UserSchema = new Schema<User, UserModel>({
   username: { type: String, required: true},
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   avatar: {type: String, required: true }
 })
 
-UserSchema.pre<UserDocument>("save", async function (next) {
+UserSchema.pre("save", async function (next) {
   
   const newUser = this 
   const plainPw = newUser.password
@@ -61,6 +60,6 @@ UserSchema.statics.checkCredentials = async function (email:string, plainPw:stri
     return null 
   }
 }
-const UserModel = model<IUser, UserModel>('User', UserSchema);
+const User = model<User, UserModel>('User', UserSchema);
 
-export default UserModel
+export default User

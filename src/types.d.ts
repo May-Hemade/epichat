@@ -11,7 +11,7 @@ interface Error {
     errorsList: string
 }
 
-interface IRequest {
+interface IRequest extends Request {
     headers:any
     user:User
 }
@@ -30,6 +30,7 @@ export interface User {
     username?: string,
     email?: string,
     avatar?: string,
+    password:string
 }
 
 export interface ChatMessage {
