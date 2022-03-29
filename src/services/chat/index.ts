@@ -55,7 +55,7 @@ chatRouter
         try {
 
             let sender = req.user?._id
-            sender = "6241a2a6eec212f2949a9be1"
+
             const senderChats = await ChatModel.find({
                 'members': sender,
             }).select("-messages")
@@ -72,7 +72,7 @@ chatRouter
         try {
 
             let sender = req.user?._id
-            sender = "6241a2a6eec212f2949a9be1"
+
             const chatId = req.params.chatId
 
 
