@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 import bcrypt from "bcrypt"
 import { Model } from 'mongoose';
 import {Document} from 'mongoose'
-import { User } from '../../types';
+import { IUser } from '../../types';
 
 interface UserDocument extends Document {
   _id: string,
@@ -13,12 +13,12 @@ interface UserDocument extends Document {
   
 }
 
-interface UserModel extends Model<User> {
-  checkCredentials(email:string, password:string):Promise<User |null>;
+interface UserModel extends Model<IUser> {
+  checkCredentials(email:string, password:string):Promise<IUser |null>;
 }
 const { Schema, model } = mongoose
 
-export const UserSchema = new Schema<User, UserModel>({
+export const UserSchema = new Schema<IUser, UserModel>({
   username: { type: String, required: true},
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
@@ -60,6 +60,6 @@ UserSchema.statics.checkCredentials = async function (email:string, plainPw:stri
     return null 
   }
 }
-const User = model<User, UserModel>('User', UserSchema);
+const User = model<IUser, UserModel>('User', UserSchema);
 
 export default User

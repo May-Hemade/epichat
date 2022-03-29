@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
-import {IPayload, User} from '../../types'
-export const authenticateUser = async (user:User) => {
+import {IPayload, IUser} from '../../types'
+export const authenticateUser = async (user:IUser) => {
     const accessToken = await generateJWTToken({ _id: user._id})
     return accessToken
   }
