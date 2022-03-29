@@ -1,6 +1,6 @@
 import mongoose from "mongoose"
 const { Schema, model } = mongoose;
-import { Chat } from "../../types";
+import { Chat } from "../../types"
 
 const chatSchema = new Schema<Chat>(
     {

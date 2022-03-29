@@ -1,8 +1,8 @@
-interface IPayload{
-    _id:string
+interface IPayload {
+    _id: string
 }
-interface Request{
-    user:User
+interface Request {
+    user: User
 }
 
 declare namespace Express {
@@ -12,26 +12,26 @@ declare namespace Express {
     export interface Response {
         user: any;
     }
-  }
+}
 interface Error {
     status: number,
     message: string,
     errorsList: string
 }
-interface Chat {
+export interface Chat {
     _id: string,
     members: User[],
     messages: ChatMessage[]
 }
 
-interface User {
+export interface User {
     _id: string,
     username?: string,
     email?: string,
     avatar?: string,
 }
 
-interface ChatMessage {
+export interface ChatMessage {
     _id: string,
     timestamp: number,
     sender: string,
@@ -39,7 +39,7 @@ interface ChatMessage {
 
 }
 
-interface MessageContent {
+export interface MessageContent {
     text?: string,
     media?: string,
 }
