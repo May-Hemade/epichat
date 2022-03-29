@@ -3,8 +3,6 @@ import createHttpError from "http-errors";
 import { authMiddleware } from "../auth/AuthMiddleware";
 import ChatModel from "./schema";
 
-
-
 const chatRouter = express.Router()
 
 chatRouter

@@ -2,7 +2,7 @@ interface IPayload {
     _id: string
 }
 interface Request {
-    _id:string
+    _id: string
 }
 
 interface Error {
@@ -12,8 +12,8 @@ interface Error {
 }
 
 interface IRequest extends Request {
-    headers:any
-    user:User
+    headers: any
+    user: User
 }
 
 
@@ -44,7 +44,7 @@ export interface IUser {
     username?: string,
     email?: string,
     avatar?: string,
-    password:string
+    password: string
 }
 
 export interface ChatMessage {
@@ -62,15 +62,16 @@ export interface MessageContent {
 
 declare global {
     namespace Express {
-        interface IUser {
-            _id: string
-            token?:string
+        // override User in express
+        interface User {
+            _id: string,
+            token?: string
         }
     }
 }
-namespace Express {
-    interface Request {
-        user?: IUser
-        _id: string
-    }
-}
+// namespace Express {
+//     interface Request {
+//         user?: IUser
+//         _id: string
+//     }
+// }

@@ -7,7 +7,7 @@ const chatSchema = new Schema<Chat>(
 
         members: [{
             type: Schema.Types.ObjectId,
-            ref: 'IUser'
+            ref: 'User'
         }],
 
         messages: [{
