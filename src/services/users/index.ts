@@ -22,6 +22,14 @@ usersRouter.get(
     }
   }
 );
+usersRouter.get('/search',  async (req: any, res: Response, next: NextFunction) => {
+  try {
+      const users = await User.find({ _id: { $ne: req.payload?._id } }).sort({ username: 'asc' })
+      res.send(users)
+  } catch (error) {
+      next(error)
+  }
+})
 usersRouter.get(
   "/id",
   async (req: Request, res: Response, next: NextFunction) => {

@@ -47,54 +47,54 @@ const googleStrategy = new Strategy({
 
 
 
-const callbackURL = process.env.CALLBACK_URL;
-const clientID = process.env.GITHUB_CLIENT_ID;
-const clientSecret = process.env.GITHUB_SECRET_KEY;
+// const callbackURL = process.env.CALLBACK_URL;
+// const clientID = process.env.GITHUB_CLIENT_ID;
+// const clientSecret = process.env.GITHUB_SECRET_KEY;
 
-if (typeof callbackURL === "undefined") {
-    throw new Error("callbackURL is undefined");
-}
+// if (typeof callbackURL === "undefined") {
+//     throw new Error("callbackURL is undefined");
+// }
 
-if (typeof clientID === "undefined") {
-    throw new Error("clientID is undefined");
-}
+// if (typeof clientID === "undefined") {
+//     throw new Error("clientID is undefined");
+// }
 
-if (typeof clientSecret === "undefined") {
-    throw new Error("clientSecret is undefined");
-}
+// if (typeof clientSecret === "undefined") {
+//     throw new Error("clientSecret is undefined");
+// }
 
-export const gitHubStrategy = new github({
-    clientID,
-    clientSecret,
-    callbackURL: `${callbackURL}/authors/githubRedirect`
-},
-    async(accessToken:string, refreshToken:string, profile:github.Profile, passportNext)=> {
-        try {
+// export const gitHubStrategy = new github({
+//     clientID,
+//     clientSecret,
+//     callbackURL: `${callbackURL}/authors/githubRedirect`
+// },
+//     async(accessToken:string, refreshToken:string, profile:github.Profile, passportNext)=> {
+//         try {
 
             
-            console.log("Github:", profile);
-            const author = await User.findOne({githubId:profile.id})
-            if(author){
-                console.log("passport.initialize()")
-                const token = await authenticateUser(author)
-                passportNext(null, {token})
-            }else{
-                const newUser = new User({
-                    full_name: profile.displayName,
-                    githubId: profile.id,
-                })
+//             console.log("Github:", profile);
+//             const author = await User.findOne({githubId:profile.id})
+//             if(author){
+//                 console.log("passport.initialize()")
+//                 const token = await authenticateUser(author)
+//                 passportNext(null, {token})
+//             }else{
+//                 const newUser = new User({
+//                     full_name: profile.displayName,
+//                     githubId: profile.id,
+//                 })
                 
-                // const savedUser = await newUser.save()
-                const token = await authenticateUser(newUser)
-                console.log(token);
-                passportNext(null, { token })
-            }
-        } catch (error) {
-            console.log(error)
-        }
-    }
+//                 // const savedUser = await newUser.save()
+//                 const token = await authenticateUser(newUser)
+//                 console.log(token);
+//                 passportNext(null, { token })
+//             }
+//         } catch (error) {
+//             console.log(error)
+//         }
+//     }
 
-)
+// )
 
 passport.serializeUser((data, done) => {
   done(null, data)
