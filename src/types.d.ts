@@ -24,7 +24,7 @@ export interface Chat {
     messages: ChatMessage[]
 }
 
-export interface User {
+export interface IUser {
     _id: string,
     username?: string,
     email?: string,

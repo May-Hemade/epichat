@@ -1,5 +1,6 @@
 import express, { NextFunction, Response, Request } from "express";
 import createHttpError from "http-errors";
+import { authMiddleware } from "../auth/AuthMiddleware";
 import ChatModel from "./schema";
 
 
@@ -7,7 +8,7 @@ import ChatModel from "./schema";
 const chatRouter = express.Router()
 
 chatRouter
-    .post('/', async (req: Request, res: Response, next: NextFunction) => {
+    .post('/', authMiddleware, async (req, res, next) => {
         try {
             const recipient: string = req.body.recipient
             let sender = req.user?._id
@@ -52,7 +53,7 @@ chatRouter
         }
     })
 
-    .get('/', async (req: Request, res: Response, next: NextFunction) => {
+    .get('/', authMiddleware, async (req, res, next) => {
         try {
 
             let sender = req.user?._id
@@ -69,7 +70,7 @@ chatRouter
 
     })
 
-    .get('/:chatId', async (req: Request, res: Response, next: NextFunction) => {
+    .get('/:chatId', authMiddleware, async (req, res, next) => {
         try {
 
             let sender = req.user?._id
