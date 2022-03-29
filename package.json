@@ -7,15 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "jest --watchAll",
     "dev": "ts-node-dev ./src/server.ts",
-<<<<<<< Updated upstream
-    "start": "node build/server.js", 
-    "build": "npx tsc",
-    "postinstall":"npm run build"
-=======
     "start": "node build/server.js",
     "build": "tsc",
     "postinstall": "npm run build"
->>>>>>> Stashed changes
   },
   "repository": {
     "type": "git",
