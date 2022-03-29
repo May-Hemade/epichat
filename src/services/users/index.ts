@@ -22,9 +22,10 @@ usersRouter.get(
     }
   }
 );
-usersRouter.get('/search',  async (req: any, res: Response, next: NextFunction) => {
+usersRouter.get('/search',  async (req: Request, res: Response, next: NextFunction) => {
   try {
-      const users = await User.find({ _id: { $ne: req.payload?._id } }).sort({ username: 'asc' })
+    const username = req.query.username
+      const users = await User.find({ username: username})
       res.send(users)
   } catch (error) {
       next(error)
@@ -78,6 +79,20 @@ usersRouter.post(
     }
   }
 );
+usersRouter.get("/me", authMiddleware, async (req:Request, res: Response, next: NextFunction) => {
+  try {
+    const token = req.headers.authorization;
+    if (!token) return res.send({ message: "No Token Provided!" });
+    const user = await User.findById(req.user);
+    if (user) {
+      res.status(200).send(user);
+    } else {
+      next(createHttpError(404, "user not found!"));
+    }
+  } catch (error) {
+    next(error)
+  }
+});
 
 usersRouter.post("/me/avatar",  parser.single('userAvatar'),  async (req:Request, res: Response, next: NextFunction) => {
   try {
