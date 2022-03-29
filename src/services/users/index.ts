@@ -6,6 +6,8 @@ import { authMiddleware } from "../auth/AuthMiddleware";
 import { Request, Response, NextFunction, RequestHandler } from "express";
 import { IRequest } from "../../types";
 import passport from "passport";
+import { cloudinary, parser } from "../utils/Cloudinary";
+
 
 const usersRouter = express.Router();
 
@@ -29,8 +31,8 @@ usersRouter.get(
     } catch (error) {
       next(error);
     }
-  }
-);
+  });
+  
 
 usersRouter.post(
   "/register",
@@ -58,7 +60,7 @@ usersRouter.post(
       if (user) {
         // 3. If credentials are fine we are going to generate an access token
         const accessToken = await authenticateUser(user);
-        res.send(accessToken);
+        res.send({accessToken});
       } else {
         // 4. If they are not --> error (401)
         next(createHttpError(401, "Credentials not ok!"));
@@ -69,22 +71,14 @@ usersRouter.post(
   }
 );
 
-usersRouter.get(
-  "/me",
-  authMiddleware,
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const request = req as unknown as IRequest;
-
-      if (request.user) {
-        const user = await User.findById(request.user._id);
-        res.send(user);
-      }
-    } catch (error) {
-      next(error);
-    }
+usersRouter.post("/me/avatar",  parser.single('userAvatar'),  async (req:Request, res: Response, next: NextFunction) => {
+  try {
+  res.json(req.file)
+  
+  } catch (error) {
+    next(error)
   }
-);
+});
 
 usersRouter.put(
   "/me",
