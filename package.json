@@ -2,14 +2,13 @@
   "name": "epichat",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "jest --watchAll",
     "dev": "ts-node-dev ./src/server.ts",
     "start": "node build/server.js", 
-    "build": "tsc",
+    "build": "npx tsc",
     "postinstall":"npm run build"
   },
   "repository": {
