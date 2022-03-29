@@ -10,7 +10,6 @@ export const authMiddleware:RequestHandler = async(req,res,next)=>{
             next(createHttpError(401, "Please provide Bearer token on headers!"))
         } else {
             const token = req.headers.authorization.replace("Bearer", "")
-            console.log(token)
             const user = await verifyJWTToken(token)
             if (!user) return next(createHttpError(401, "Invalid Details"));
             req.user = {
