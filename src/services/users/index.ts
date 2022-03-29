@@ -5,6 +5,7 @@ import { authenticateUser } from "../auth/GenerateToken";
 import { authMiddleware } from "../auth/AuthMiddleware";
 import { Request, Response, NextFunction, RequestHandler } from "express";
 import { IRequest } from "../../types"
+import { cloudinary, parser } from "../utils/Cloudinary";
 
 
 const usersRouter = express.Router();
@@ -27,7 +28,7 @@ usersRouter.get("/id",  async(req:Request, res: Response, next: NextFunction) =>
   });
   
 
-usersRouter.post("/register", async (req:Request, res: Response, next: NextFunction) => {
+usersRouter.post("/register",  async (req:Request, res: Response, next: NextFunction) => {
   try {
     const newUser = new User(req.body)
     const { _id } = await newUser.save()
@@ -53,7 +54,7 @@ usersRouter.post("/login", async (req:Request, res: Response, next: NextFunction
     if (user) {
       // 3. If credentials are fine we are going to generate an access token
       const accessToken = await authenticateUser(user)
-      res.send(accessToken)
+      res.send({accessToken})
     } else {
       // 4. If they are not --> error (401)
       next(createHttpError(401, "Credentials not ok!"))
@@ -62,6 +63,16 @@ usersRouter.post("/login", async (req:Request, res: Response, next: NextFunction
     next(error)
   }
 });
+
+usersRouter.post("/me/avatar",  parser.single('userAvatar'),  async (req:Request, res: Response, next: NextFunction) => {
+  try {
+  res.json(req.file)
+  
+  } catch (error) {
+    next(error)
+  }
+});
+
 
 
 usersRouter.get("/me", authMiddleware, async (req:Request, res:Response, next:NextFunction) => {
