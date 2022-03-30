@@ -7,6 +7,8 @@ import usersRouter from './services/users'
 import googleStrategy, {gitHubStrategy } from './services/auth/oauth';
 import chatRouter from './services/chat';
 
+import { createServer } from "http";
+import { Server } from "socket.io";
 
 
 
@@ -23,6 +25,23 @@ server.use(passport.initialize())
 server.use('/users', usersRouter)
 server.use('/chat', chatRouter)
 
+const httpServer = createServer(server);
+const io = new Server(httpServer, { /* options */ });
+
+io.use((socket, next) => {
+  console.log(socket.handshake.auth)
+  next()
+})
+
+io.on("connection", (socket) => {
+  console.log(socket.handshake.auth) // jwt.verify(using your JWT secret) => this will return the user ID
+
+  // using the user id, you may want to keep an array of online users....
+  // onlineUsers.push({ userId: decodedToken._id, socket: socket })
+  // ...
+});
+
+
 if (!process.env.MONGO_CONNECTION) {
   throw Error("Url is undefined!")
 }
@@ -30,7 +49,7 @@ mongoose.connect(process.env.MONGO_CONNECTION)
 
 mongoose.connection.on("connected", () => {
   console.log("Successfully connected to Mongo!")
-  server.listen(port, () => {
+  httpServer.listen(port, () => {
     console.table(listEndpoints(server))
     console.log("Server runnning on port: ", 3001)
   })
