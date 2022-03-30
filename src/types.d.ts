@@ -17,7 +17,10 @@ interface IRequest extends Request {
 }
 
 
-
+export interface OnlineUser {
+    userId: string,
+    socketId: string
+}
 
 
 export interface UserProfile {
@@ -51,6 +54,15 @@ export interface ChatMessage {
     _id: string,
     timestamp: number,
     sender: string,
+    content: MessageContent,
+
+}
+
+export interface SocketChatMessage {
+    chatId: string,
+    sender: string,
+    timestamp: number,
+    recipientId: string,
     content: MessageContent,
 
 }

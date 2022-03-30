@@ -11,8 +11,6 @@ chatRouter
             const recipient: string = req.body.recipient
             let sender = req.user?._id
 
-            //temporary id
-            sender = "6241a17deec212f2949a9bde"
 
             if (sender) {
                 if (!recipient) {
