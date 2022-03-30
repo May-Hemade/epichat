@@ -7,7 +7,6 @@ import { Request, Response, NextFunction, RequestHandler } from "express";
 import { IRequest } from "../../types";
 import passport from "passport";
 import { cloudinary, parser } from "../utils/Cloudinary";
-console.log(process.env.GOOGLE_SECRET);
 
 
 const usersRouter = express.Router();
@@ -23,6 +22,15 @@ usersRouter.get(
     }
   }
 );
+usersRouter.get('/search',  async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const username = req.query.username
+      const users = await User.find({ username: username})
+      res.send(users)
+  } catch (error) {
+      next(error)
+  }
+})
 usersRouter.get(
   "/id",
   async (req: Request, res: Response, next: NextFunction) => {
@@ -71,6 +79,20 @@ usersRouter.post(
     }
   }
 );
+usersRouter.get("/me", authMiddleware, async (req:Request, res: Response, next: NextFunction) => {
+  try {
+    const token = req.headers.authorization;
+    if (!token) return res.send({ message: "No Token Provided!" });
+    const user = await User.findById(req.user);
+    if (user) {
+      res.status(200).send(user);
+    } else {
+      next(createHttpError(404, "user not found!"));
+    }
+  } catch (error) {
+    next(error)
+  }
+});
 
 usersRouter.post("/me/avatar",  parser.single('userAvatar'),  async (req:Request, res: Response, next: NextFunction) => {
   try {
