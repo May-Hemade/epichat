@@ -40,13 +40,14 @@ export interface Chat {
 }
 
 export interface IUser {
-    _id: string,
-    username?: string,
-    email?: string,
-    avatar?: string,
-    password: string,
-    googleId?:string,
-    githubId?:string
+  _id: string;
+  username?: string;
+  email?: string;
+  info?: string ;
+  avatar?: string;
+  password: string;
+  googleId?: string;
+  githubId?: string;
 }
 
 export interface ChatMessage {

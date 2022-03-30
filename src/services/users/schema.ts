@@ -12,13 +12,14 @@ interface UserModel extends Model<IUser> {
 const { Schema, model } = mongoose
 
 export const UserSchema = new Schema<IUser, UserModel>({
-  username: { type: String},
+  username: { type: String },
   email: { type: String },
+  info: { type: String },
   password: { type: String },
-  avatar: {type: String },
-  googleId:{type:String},
-  githubId:{type:String}
-})
+  avatar: { type: String },
+  googleId: { type: String },
+  githubId: { type: String },
+});
 
 UserSchema.pre("save", async function (next) {
   
