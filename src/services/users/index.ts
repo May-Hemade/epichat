@@ -135,21 +135,29 @@ usersRouter.get(
       console.log("TOKENS: ", request.user.token);
 
       res.redirect(
-        `${process.env.FE_URL}?accessToken=${request.user.token.accessToken}&refreshToken=${request.user.token.refreshToken}`
+        `${process.env.FE_URL}?accessToken=${request.user.token.refreshToken}`
       );
     } catch (error) {
       next(error);
     }
   }
 );
-usersRouter.get('/auth/github',
-  passport.authenticate('github', { scope: [ 'user:email' ] }));
+usersRouter.get('/githubLogin',
+  passport.authenticate('github', { scope: [ 'email' ,"profile" ] }));
 
-usersRouter.get('/auth/github/callback', 
-  passport.authenticate('github', { failureRedirect: '/login' }),
-  function(req, res) {
-    
-    res.redirect('/');
+usersRouter.get('/githubRedirect', 
+  passport.authenticate('Github'),
+  async(req, res, next) => {
+    try {
+      const request = req as unknown as IRequest;
+      console.log("TOKENS: ", request.user.token);
+
+      res.redirect(
+        `${process.env.FE_URL}?accessToken=${request.user.token.refreshToken}`
+      );
+    } catch (error) {
+      next(error);
+    }
   });
 
 export default usersRouter;

@@ -66,7 +66,7 @@ if (typeof clientSecret === "undefined") {
 export const gitHubStrategy = new github({
     clientID,
     clientSecret,
-    callbackURL: `${callbackURL}/authors/githubRedirect`
+    callbackURL: `${callbackURL}/users/githubRedirect`
 },
     async(accessToken:string, refreshToken:string, profile:github.Profile, passportNext)=> {
         try {
