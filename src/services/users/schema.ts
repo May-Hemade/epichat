@@ -16,7 +16,11 @@ export const UserSchema = new Schema<IUser, UserModel>({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   avatar: {type: String }
-})
+},
+{
+  timestamps: true
+}
+)
 
 UserSchema.pre("save", async function (next) {
   
