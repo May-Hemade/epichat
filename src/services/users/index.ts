@@ -22,6 +22,15 @@ usersRouter.get(
     }
   }
 );
+usersRouter.get('/search',  async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const username = req.query.username
+      const users = await User.find({ username: username})
+      res.send(users)
+  } catch (error) {
+      next(error)
+  }
+})
 usersRouter.get(
   "/id",
   async (req: Request, res: Response, next: NextFunction) => {
@@ -70,6 +79,20 @@ usersRouter.post(
     }
   }
 );
+usersRouter.get("/me", authMiddleware, async (req:Request, res: Response, next: NextFunction) => {
+  try {
+    const token = req.headers.authorization;
+    if (!token) return res.send({ message: "No Token Provided!" });
+    const user = await User.findById(req.user);
+    if (user) {
+      res.status(200).send(user);
+    } else {
+      next(createHttpError(404, "user not found!"));
+    }
+  } catch (error) {
+    next(error)
+  }
+});
 
 usersRouter.post("/me/avatar",  parser.single('userAvatar'),  async (req:Request, res: Response, next: NextFunction) => {
   try {
@@ -112,12 +135,29 @@ usersRouter.get(
       console.log("TOKENS: ", request.user.token);
 
       res.redirect(
-        `${process.env.FE_URL}?accessToken=${request.user.token.accessToken}&refreshToken=${request.user.token.refreshToken}`
+        `${process.env.FE_URL}?accessToken=${request.user.token.refreshToken}`
       );
     } catch (error) {
       next(error);
     }
   }
 );
+usersRouter.get('/githubLogin',
+  passport.authenticate('github', { scope: [ 'email' ,"profile" ] }));
+
+usersRouter.get('/githubRedirect', 
+  passport.authenticate('Github'),
+  async(req, res, next) => {
+    try {
+      const request = req as unknown as IRequest;
+      console.log("TOKENS: ", request.user.token);
+
+      res.redirect(
+        `${process.env.FE_URL}?accessToken=${request.user.token.refreshToken}`
+      );
+    } catch (error) {
+      next(error);
+    }
+  });
 
 export default usersRouter;

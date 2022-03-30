@@ -10,7 +10,7 @@ console.log(process.env.GOOGLE_ID);
 const googleStrategy = new Strategy({
   clientID: process.env.GOOGLE_ID || "",
   clientSecret: process.env.GOOGLE_SECRET || "",
-  callbackURL: `${process.env.API_URL}/user/googleRedirect`,
+  callbackURL: `${process.env.API_URL}/users/googleRedirect`,
   passReqToCallback: true
 },
   async function (request, accessToken, refresh, profile, done) {
@@ -64,9 +64,9 @@ if (typeof clientSecret === "undefined") {
 }
 
 export const gitHubStrategy = new github({
-  clientID,
-  clientSecret,
-  callbackURL: `${callbackURL}/authors/githubRedirect`
+    clientID,
+    clientSecret,
+    callbackURL: `${callbackURL}/users/githubRedirect`
 },
   async (accessToken: string, refreshToken: string, profile: github.Profile, passportNext) => {
     try {
