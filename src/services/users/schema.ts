@@ -12,7 +12,7 @@ interface UserModel extends Model<IUser> {
 const { Schema, model } = mongoose
 
 export const UserSchema = new Schema<IUser, UserModel>({
-  username: { type: String, required: true},
+  username: { type: String},
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   avatar: {type: String }
