@@ -52,12 +52,17 @@ io.use((socket, next) => {
 
 // when a client connects to th socket 
 io.on("connection", async (socket) => {
-  let token = socket.handshake.query.token
+  console.log("new socket connected")
+  let token = socket.handshake.auth.token
   if (!token) {
+    console.log("NO token")
     socket.emit("error", { message: "need token" })
     return
   }
-
+  socket.on("locationsEvent", (asd)=> {
+    console.log(asd);
+    
+  })
 
   const user = await verifyJWTToken(token as string)
   const userId = user._id
