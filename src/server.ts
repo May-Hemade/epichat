@@ -36,6 +36,7 @@ const io = new Server(httpServer, { /* options */ });
 
 let onlineUsers: OnlineUser[] = []
 
+// created an api to return  all  online users
 server.get('/online-users', (req, res) => {
   res.send({ onlineUsers })
 })
@@ -48,6 +49,8 @@ io.use((socket, next) => {
   next()
 })
 
+
+// when a client connects to th socket 
 io.on("connection", async (socket) => {
   let token = socket.handshake.query.token
   if (!token) {
@@ -55,26 +58,31 @@ io.on("connection", async (socket) => {
     return
   }
 
+
   const user = await verifyJWTToken(token as string)
   const userId = user._id
   const socketId = socket.id
+  const onlineUser: OnlineUser = { userId, socketId }
+  onlineUsers.push(onlineUser)
 
-  onlineUsers.push({ userId, socketId })
   socket.join(allUserRoom)
+
+  // for the user to know he is logged in 
   socket.emit("loggedin")
+
+  // for all online users to know there is a new connection 
   socket.broadcast.emit("new-connection")
+
   // this should only be reached if the user already created a chat in the database else their should be a post to create a chat and than we can reach this point.
   socket.on("outgoing-msg", async (message: SocketChatMessage) => {
 
     try {
       console.log(message)
-      const msg = {
-        sender: message["sender"],
-        content: message["content"],
-      }
 
-      console.log(msg)
-      const chatMessage = new ChatMessageModel(msg);
+      const chatMessage = new ChatMessageModel({
+        sender: message.sender,
+        content: message.content,
+      });
       const chatMessageDocument = await chatMessage.save();
       if (chatMessageDocument) {
         const updatedChat = await ChatModel.findByIdAndUpdate(message.chatId, { $push: { messages: chatMessageDocument._id } })
@@ -93,10 +101,7 @@ io.on("connection", async (socket) => {
 
     }
 
-
-
   })
-
 
   socket.on("disconnect", () => {
     onlineUsers = onlineUsers.filter(user => user.socketId !== socket.id)
